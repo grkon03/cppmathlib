@@ -76,6 +76,10 @@ namespace gmathlib
             arbuint &operator-=(const arbuint &);
             arbuint &operator--();
 
+            // comparation
+
+            bool operator<(const arbuint &);
+
             //// functions
 
             string ToString();
@@ -296,6 +300,12 @@ namespace gmathlib
             return (ret -= op);
         }
 
+        arbuint arbuint::operator-(arbuint op)
+        {
+            arbuint ret = *this;
+            return (ret -= op);
+        }
+
         arbuint &arbuint::operator-=(unsigned int op)
         {
             return (*this -= (unsigned long long)op);
@@ -317,6 +327,34 @@ namespace gmathlib
                 --(*next);
                 bits += 1 + (_support::full__64bitmap - op);
             }
+            DeleteWaste();
+
+            return *this;
+        }
+
+        arbuint &arbuint::operator-=(const arbuint &op)
+        {
+            if (*this < op)
+            {
+                *this = 0;
+                DeleteWaste();
+
+                return *this;
+            }
+
+            if (bits < op.bits)
+            {
+                --(*next);
+                bits = bits + 1 + (_support::full__64bitmap - op.bits);
+            }
+            else
+            {
+                bits -= op.bits;
+            }
+
+            if (op.next != nullptr)
+                *next -= *(op.next);
+
             DeleteWaste();
 
             return *this;
