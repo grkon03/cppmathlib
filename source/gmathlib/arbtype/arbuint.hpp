@@ -322,6 +322,25 @@ namespace gmathlib
             return *this;
         }
 
+        arbuint &arbuint::operator--()
+        {
+            DeleteWaste();
+            if (bits == 0)
+            {
+                if (next != nullptr)
+                {
+                    --(*next);
+                    bits = _support::full__64bitmap;
+                }
+            }
+            else
+            {
+                --bits;
+            }
+            DeleteWaste();
+            return *this;
+        }
+
         //// functions
 
         string arbuint::ToString()
