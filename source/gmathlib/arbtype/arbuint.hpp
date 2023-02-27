@@ -49,10 +49,32 @@ namespace gmathlib
 
             //// operators
 
-            arbuint operator<<(int);
-            arbuint &operator<<=(int);
-            arbuint operator>>(int);
-            arbuint &operator>>=(int);
+            // bit shift (limited unsigned int)
+
+            arbuint operator<<(unsigned int);
+            arbuint &operator<<=(unsigned int);
+            arbuint operator>>(unsigned int);
+            arbuint &operator>>=(unsigned int);
+
+            // add
+
+            arbuint operator+(unsigned int);
+            arbuint operator+(unsigned long long);
+            arbuint operator+(arbuint);
+            arbuint operator+=(unsigned int);
+            arbuint operator+=(unsigned long long);
+            arbuint operator+=(arbuint);
+            arbuint operator++();
+
+            // sub
+
+            arbuint operator-(unsigned int);
+            arbuint operator-(unsigned long long);
+            arbuint operator-(arbuint);
+            arbuint operator-=(unsigned int);
+            arbuint operator-=(unsigned long long);
+            arbuint operator-=(arbuint);
+            arbuint operator--();
 
             //// functions
 
@@ -69,6 +91,10 @@ namespace gmathlib
             void __danger__SetBits(__64bitmap);
             void __danger__SetNext(arbuint *);
             void __danger__SetPrev(arbuint *);
+            arbuint *__danger__GetNext();
+            arbuint *__danger__GetPrev();
+
+            void __danger__ConnectToTopDigit(arbuint);
         };
 
         //// ostream
@@ -108,13 +134,42 @@ namespace gmathlib
 
         //// operators
 
-        arbuint arbuint::operator<<(int exponent)
+        arbuint arbuint::operator<<(unsigned int exponent)
         {
-            arbuint r;
+            arbuint ret = *this;
+            return (ret <<= exponent);
         }
 
-        arbuint &arbuint::operator<<(int exponent)
+        arbuint &arbuint::operator<<=(unsigned int exponent)
         {
+            unsigned int zerofills = exponent / 64;
+            unsigned int essexponent = exponent % 64;
+            __64bitmap moveup;
+
+            // first, calculate essentially exponential
+
+            moveup = bits / _support::digit__64bitmap[essexponent];
+            bits << essexponent;
+            *next <<= essexponent;
+            *next += moveup;
+
+            // second, add zerofill bits
+
+            arbuint zeros = 0;
+
+            int i;
+
+            if (zerofills >= 1)
+            {
+                for (i = 1; i < zerofills; ++i)
+                {
+                    zeros.__danger__ConnectToTopDigit(zeros);
+                }
+                zeros.__danger__ConnectToTopDigit(*this);
+                *this = zeros;
+            }
+
+            return *this;
         }
 
         //// functions
@@ -192,5 +247,14 @@ namespace gmathlib
         void arbuint::__danger__SetBits(__64bitmap b) { bits = b; }
         void arbuint::__danger__SetNext(arbuint *n) { next = n; }
         void arbuint::__danger__SetPrev(arbuint *p) { prev = p; }
+        arbuint *arbuint::__danger__GetNext() { return next; }
+        arbuint *arbuint::__danger__GetPrev() { return prev; }
+
+        void arbuint::__danger__ConnectToTopDigit(arbuint pau)
+        {
+            arbuint *p = last();
+            p->__danger__SetNext(new arbuint(pau));
+            p->__danger__GetNext()->__danger__SetPrev(p);
+        }
     }
 }
