@@ -82,6 +82,11 @@ namespace gmathlib
             string ToString(int);
 
             arbuint *last();
+            arbuint *GetNthNext(unsigned int); // now limited to unsigned int
+
+            __64bitmap GetBits();
+            arbuint *GetNext();
+            arbuint *GetPrev();
 
             //// dangers
             /*
@@ -91,8 +96,6 @@ namespace gmathlib
             void __danger__SetBits(__64bitmap);
             void __danger__SetNext(arbuint *);
             void __danger__SetPrev(arbuint *);
-            arbuint *__danger__GetNext();
-            arbuint *__danger__GetPrev();
 
             void __danger__ConnectToTopDigit(arbuint);
         };
@@ -172,6 +175,42 @@ namespace gmathlib
             return *this;
         }
 
+        arbuint arbuint::operator>>(unsigned int inverseExponent)
+        {
+            arbuint ret = *this;
+            return (ret >>= inverseExponent);
+        }
+
+        arbuint &arbuint::operator>>=(unsigned int inverseExponent)
+        {
+            unsigned int willdeleted = inverseExponent / 64;
+            unsigned int essinverse = inverseExponent % 64;
+
+            // first, delete some lists
+
+            arbuint *nth = GetNthNext(willdeleted);
+            nth->__danger__SetPrev(nullptr);
+
+            *this = *nth;
+
+            // second, calculate essentially inverse exponential
+
+            if (essinverse == 0)
+                return *this;
+
+            __64bitmap movedown;
+
+            bits >>= essinverse;
+            if (next != nullptr)
+            {
+                movedown = next->GetBits() % _support::digit__64bitmap[essinverse];
+                this->bits += movedown * _support::digit__64bitmap[64 - essinverse];
+            }
+            *next >>= essinverse;
+
+            return *this;
+        }
+
         //// functions
 
         string arbuint::ToString()
@@ -242,19 +281,33 @@ namespace gmathlib
                 return next->last();
         }
 
+        arbuint *arbuint::GetNthNext(unsigned int num)
+        {
+            unsigned int i;
+            arbuint *retp = this;
+            for (i = 0; i < num; ++i)
+            {
+                retp = retp->GetNext();
+            }
+
+            return retp;
+        }
+
+        __64bitmap arbuint::GetBits() { return bits; }
+        arbuint *arbuint::GetNext() { return next; }
+        arbuint *arbuint::GetPrev() { return prev; }
+
         //// dangers
 
         void arbuint::__danger__SetBits(__64bitmap b) { bits = b; }
         void arbuint::__danger__SetNext(arbuint *n) { next = n; }
         void arbuint::__danger__SetPrev(arbuint *p) { prev = p; }
-        arbuint *arbuint::__danger__GetNext() { return next; }
-        arbuint *arbuint::__danger__GetPrev() { return prev; }
 
         void arbuint::__danger__ConnectToTopDigit(arbuint pau)
         {
             arbuint *p = last();
             p->__danger__SetNext(new arbuint(pau));
-            p->__danger__GetNext()->__danger__SetPrev(p);
+            p->GetNext()->__danger__SetPrev(p);
         }
     }
 }
