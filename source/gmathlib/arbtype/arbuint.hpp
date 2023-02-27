@@ -244,6 +244,21 @@ namespace gmathlib
             return *this;
         }
 
+        arbuint &arbuint::operator++()
+        {
+            if (bits == _support::full__64bitmap)
+            {
+                bits = 0;
+                ++(*next);
+            }
+            else
+            {
+                ++bits;
+            }
+
+            return *this;
+        }
+
         //// functions
 
         string arbuint::ToString()
