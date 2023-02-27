@@ -30,3 +30,12 @@
 *.exe
 *.out
 *.app
+
+# macos
+.DS_Store
+
+# vscode
+.vscode
+
+# for test
+test_output/*
