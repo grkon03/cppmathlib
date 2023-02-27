@@ -49,10 +49,6 @@ namespace gmathlib
 
             //// operators
 
-            // ToDo but next time
-            // arbuint operator/(int);
-            // int operator%(int);
-
             //// functions
 
             string ToString();
