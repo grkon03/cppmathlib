@@ -63,7 +63,7 @@ namespace gmathlib
             arbuint operator+(arbuint);
             arbuint &operator+=(unsigned int);
             arbuint &operator+=(unsigned long long);
-            arbuint &operator+=(arbuint);
+            arbuint &operator+=(const arbuint &);
             arbuint &operator++();
 
             // sub
@@ -87,6 +87,8 @@ namespace gmathlib
             __64bitmap GetBits();
             arbuint *GetNext();
             arbuint *GetPrev();
+
+            void MoveUpOne();
 
             //// dangers
             /*
@@ -205,8 +207,8 @@ namespace gmathlib
             {
                 movedown = next->GetBits() % _support::digit__64bitmap[essinverse];
                 this->bits += movedown * _support::digit__64bitmap[64 - essinverse];
+                *next >>= essinverse;
             }
-            *next >>= essinverse;
 
             return *this;
         }
@@ -223,6 +225,11 @@ namespace gmathlib
             return (ret += op);
         }
 
+        arbuint arbuint::operator+(arbuint op)
+        {
+            return (op += *this);
+        }
+
         arbuint &arbuint::operator+=(unsigned int op)
         {
             *this += (unsigned long long)op;
@@ -234,7 +241,7 @@ namespace gmathlib
             if (_support::full__64bitmap - bits < op)
             {
                 bits = op - 1 - (_support::full__64bitmap - bits);
-                ++(*next);
+                MoveUpOne();
             }
             else
             {
@@ -244,12 +251,29 @@ namespace gmathlib
             return *this;
         }
 
+        arbuint &arbuint::operator+=(const arbuint &op)
+        {
+            // check if move up
+            if (_support::full__64bitmap - bits < op.bits)
+            {
+                bits -= op.bits - 1 - (_support::full__64bitmap - bits);
+                MoveUpOne();
+            }
+            else
+            {
+                bits += op.bits;
+            }
+
+            if (op.next != nullptr)
+                *next += *op.next;
+        }
+
         arbuint &arbuint::operator++()
         {
             if (bits == _support::full__64bitmap)
             {
                 bits = 0;
-                ++(*next);
+                MoveUpOne();
             }
             else
             {
@@ -344,6 +368,19 @@ namespace gmathlib
         __64bitmap arbuint::GetBits() { return bits; }
         arbuint *arbuint::GetNext() { return next; }
         arbuint *arbuint::GetPrev() { return prev; }
+
+        void arbuint::MoveUpOne()
+        {
+            if (next == nullptr)
+            {
+                next = new arbuint(1);
+                next->__danger__SetPrev(this);
+            }
+            else
+            {
+                ++(*next);
+            }
+        }
 
         //// dangers
 
