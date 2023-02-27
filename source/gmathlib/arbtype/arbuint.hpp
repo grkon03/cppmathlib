@@ -49,6 +49,11 @@ namespace gmathlib
 
             //// operators
 
+            arbuint operator<<(int);
+            arbuint &operator<<=(int);
+            arbuint operator>>(int);
+            arbuint &operator>>=(int);
+
             //// functions
 
             string ToString();
@@ -102,6 +107,15 @@ namespace gmathlib
         }
 
         //// operators
+
+        arbuint arbuint::operator<<(int exponent)
+        {
+            arbuint r;
+        }
+
+        arbuint &arbuint::operator<<(int exponent)
+        {
+        }
 
         //// functions
 
