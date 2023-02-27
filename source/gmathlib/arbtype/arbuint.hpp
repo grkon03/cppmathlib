@@ -145,7 +145,7 @@ namespace gmathlib
                     }
 
                     if (next != nullptr)
-                        retstr = next->ToString() + retstr;
+                        retstr = next->ToString(base) + retstr;
                 }
             }
 
@@ -163,7 +163,8 @@ namespace gmathlib
             }
 
             // add base infomation
-            retstr = std::to_string(base) + "|" + retstr;
+            if (next == nullptr)
+                retstr = std::to_string(base) + "|" + retstr;
 
             return retstr;
         }
