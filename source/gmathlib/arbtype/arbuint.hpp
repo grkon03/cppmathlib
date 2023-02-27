@@ -73,7 +73,7 @@ namespace gmathlib
             arbuint operator-(arbuint);
             arbuint &operator-=(unsigned int);
             arbuint &operator-=(unsigned long long);
-            arbuint &operator-=(arbuint);
+            arbuint &operator-=(const arbuint &);
             arbuint &operator--();
 
             //// functions
@@ -89,6 +89,7 @@ namespace gmathlib
             arbuint *GetPrev();
 
             void MoveUpOne();
+            void DeleteWaste();
 
             //// dangers
             /*
@@ -283,6 +284,44 @@ namespace gmathlib
             return *this;
         }
 
+        arbuint arbuint::operator-(unsigned int op)
+        {
+            arbuint ret = *this;
+            return (ret -= op);
+        }
+
+        arbuint arbuint::operator-(unsigned long long op)
+        {
+            arbuint ret = *this;
+            return (ret -= op);
+        }
+
+        arbuint &arbuint::operator-=(unsigned int op)
+        {
+            return (*this -= (unsigned long long)op);
+        }
+
+        arbuint &arbuint::operator-=(unsigned long long op)
+        {
+            DeleteWaste();
+            if (next == nullptr && (bits < op))
+            {
+                bits = 0;
+            }
+            else if (bits >= op)
+            {
+                bits -= op;
+            }
+            else
+            {
+                --(*next);
+                bits += 1 + (_support::full__64bitmap - op);
+            }
+            DeleteWaste();
+
+            return *this;
+        }
+
         //// functions
 
         string arbuint::ToString()
@@ -379,6 +418,17 @@ namespace gmathlib
             else
             {
                 ++(*next);
+            }
+        }
+
+        void arbuint::DeleteWaste()
+        {
+            arbuint *p = last();
+            while (p->GetBits() == 0 && p != this)
+            {
+                p = p->GetPrev();
+                delete p->GetNext();
+                p->__danger__SetNext(nullptr);
             }
         }
 
