@@ -61,20 +61,20 @@ namespace gmathlib
             arbuint operator+(unsigned int);
             arbuint operator+(unsigned long long);
             arbuint operator+(arbuint);
-            arbuint operator+=(unsigned int);
-            arbuint operator+=(unsigned long long);
-            arbuint operator+=(arbuint);
-            arbuint operator++();
+            arbuint &operator+=(unsigned int);
+            arbuint &operator+=(unsigned long long);
+            arbuint &operator+=(arbuint);
+            arbuint &operator++();
 
             // sub
 
             arbuint operator-(unsigned int);
             arbuint operator-(unsigned long long);
             arbuint operator-(arbuint);
-            arbuint operator-=(unsigned int);
-            arbuint operator-=(unsigned long long);
-            arbuint operator-=(arbuint);
-            arbuint operator--();
+            arbuint &operator-=(unsigned int);
+            arbuint &operator-=(unsigned long long);
+            arbuint &operator-=(arbuint);
+            arbuint &operator--();
 
             //// functions
 
@@ -207,6 +207,39 @@ namespace gmathlib
                 this->bits += movedown * _support::digit__64bitmap[64 - essinverse];
             }
             *next >>= essinverse;
+
+            return *this;
+        }
+
+        arbuint arbuint::operator+(unsigned int op)
+        {
+            arbuint ret = *this;
+            return (ret += op);
+        }
+
+        arbuint arbuint::operator+(unsigned long long op)
+        {
+            arbuint ret = *this;
+            return (ret += op);
+        }
+
+        arbuint &arbuint::operator+=(unsigned int op)
+        {
+            *this += (unsigned long long)op;
+        }
+
+        arbuint &arbuint::operator+=(unsigned long long op)
+        {
+            // check if move up
+            if (_support::full__64bitmap - bits < op)
+            {
+                bits = op - 1 - (_support::full__64bitmap - bits);
+                ++(*next);
+            }
+            else
+            {
+                bits += op;
+            }
 
             return *this;
         }

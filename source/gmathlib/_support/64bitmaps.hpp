@@ -77,5 +77,9 @@ namespace gmathlib
             1ULL << 076,
             1ULL << 077,
         };
+
+        // full bits 64 bitmap
+
+        constexpr __64bitmap full__64bitmap = 0xffffffffffffffffULL;
     }
 }
