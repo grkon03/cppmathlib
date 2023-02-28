@@ -379,6 +379,39 @@ namespace gmathlib
             return *this;
         }
 
+        bool arbuint::operator<(const arbuint &op)
+        {
+            arbuint opc = op;
+
+            DeleteWaste();
+            opc.DeleteWaste();
+
+            // comparing next
+            if (this == nullptr)
+            {
+                if (opc.GetNext() != nullptr)
+                    return true;
+            }
+            else
+            {
+                if (opc.GetNext() == nullptr)
+                {
+                    return false;
+                }
+                else
+                {
+                    if (*next < *(opc.GetNext()))
+                        return true;
+                    else if (*(opc.GetNext()) < *next)
+                        return false;
+                }
+            }
+
+            // when *next == *op.next
+
+            return bits < op.bits;
+        }
+
         //// functions
 
         string arbuint::ToString()
