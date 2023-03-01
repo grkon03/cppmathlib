@@ -38,6 +38,24 @@ arbuint n = "1000000000000000000000000000000"; // big integer
 
 ### Operators
 
+- `operator<<`/`operator<<=` (left-shift operation)
+
+  Left-shift operation as usual. **Note: the right operand is limited to unsigned int. **
+
+  ```
+  arbuint = arbuint << unsigned int
+  arbuint <<= unsigned int
+  ```
+
+- `operator>>`/`operator>>=` (right-shift operation)
+
+  Right-shift operation as usual. **Note: the right operand is limited to unsigned int. **
+
+  ```
+  arbuint = arbuint >> unsigned int
+  arbuint >>= unsigned int
+  ```
+
 - `operator+`/`operator+=`/`operator++`
 
   Addition as usual.
@@ -88,6 +106,16 @@ arbuint n = "1000000000000000000000000000000"; // big integer
 
   ```
   --arbuint
+  ```
+
+- `operator<` (less than)
+
+  Less than as usual.
+
+  What operands are usable?
+
+  ```
+  arbuint < arbuint
   ```
 
 [Back to table of contents of "How"](#how)
