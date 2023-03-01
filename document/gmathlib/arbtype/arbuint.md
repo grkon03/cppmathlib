@@ -64,4 +64,30 @@ arbuint n = "1000000000000000000000000000000"; // big integer
   ++arbuint
   ```
 
+- `operator-`/`operator-=`/`operator--`
+
+  Subtraction as usual. **Note: if the result of sub is negative, the value is set to 0.**
+
+  What operands are usable?
+
+  ```
+  arbuint = arbuint - unsigned int
+  arbuint = arbuint - unsigned long long
+  arbuint = arbuint - arbuint
+  ```
+
+  Also, so are compound assignment operators.
+
+  ```
+  arbuint -= unsigned int
+  arbuint -= unsigned long long
+  arbuint -= arbuint
+  ```
+
+  Decrement as usual.
+
+  ```
+  --arbuint
+  ```
+
 [Back to table of contents of "How"](#how)
