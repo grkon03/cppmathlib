@@ -16,6 +16,9 @@ namespace gmathlib {
 
 ## How
 
+- [To Initialize](#to-initialize)
+- [Operatos](#operators)
+
 ### To Initialize
 
 When you are to initialize arbuint, you could do so as you intialize `int`, `long`, ....
@@ -31,38 +34,34 @@ arbuint n = "20|f312ij8"; // 20-adic
 arbuint n = "1000000000000000000000000000000"; // big integer
 ```
 
-### To Use
+[Back to table of contents of "How"](#how)
 
-- [operators](#operators)
-
-#### operators
-
-[Back to table of contents of "To Use"](#to-use)
+### Operators
 
 - `operator+`/`operator+=`/`operator++`
 
-Addition as usual.
+  Addition as usual.
 
-What operands are usable?
+  What operands are usable?
 
-```
-arbuint = arbuint + unsigned int
-arbuint = arbuint + unsigned long long
-arbuint = arbuint + arbuint
-```
+  ```
+  arbuint = arbuint + unsigned int
+  arbuint = arbuint + unsigned long long
+  arbuint = arbuint + arbuint
+  ```
 
-Also, so are compound assignment operators.
+  Also, so are compound assignment operators.
 
-```
-arbuint += unsigned int
-arbuint += unsigned long long
-arbuint += arbuint
-```
+  ```
+  arbuint += unsigned int
+  arbuint += unsigned long long
+  arbuint += arbuint
+  ```
 
-Increment as usual.
+  Increment as usual.
 
-```
-++arbuint
-```
+  ```
+  ++arbuint
+  ```
 
-[Back to table of contents of "To Use"](#to-use)
+[Back to table of contents of "How"](#how)
