@@ -30,3 +30,39 @@ But when you are going to use n-adic expression or to initialize to **so much bi
 arbuint n = "20|f312ij8"; // 20-adic
 arbuint n = "1000000000000000000000000000000"; // big integer
 ```
+
+### To Use
+
+- [operators](#operators)
+
+#### operators
+
+[Back to table of contents of "To Use"](#to-use)
+
+- `operator+`/`operator+=`/`operator++`
+
+Addition as usual.
+
+What operands are usable?
+
+```
+arbuint = arbuint + unsigned int
+arbuint = arbuint + unsigned long long
+arbuint = arbuint + arbuint
+```
+
+Also, so are compound assignment operators.
+
+```
+arbuint += unsigned int
+arbuint += unsigned long long
+arbuint += arbuint
+```
+
+Increment as usual.
+
+```
+++arbuint
+```
+
+[Back to table of contents of "To Use"](#to-use)
